@@ -19,7 +19,7 @@ The GitLab pipeline (`.gitlab-ci.yml`) uses a **shell runner** tagged `shared`; 
 
 - `check`: runs `./gradlew --no-daemon --console=plain check`, including tests, Spotless, and Checkstyle. Publishes JUnit results and HTML test/Checkstyle reports, including on failure.
 - `build`: runs `./gradlew --no-daemon --console=plain build` only after checks pass. Publishes `build/libs/*.jar`.
-- Artifacts are retained for one week. Gradle downloads are stored in the job checkout under `.gradle-ci`.
+- Artifacts are retained for one week. Gradle uses the runner user's persistent `~/.gradle` directory to reuse Gradle distributions, dependencies, and downloaded Java toolchains between jobs. Each runner host maintains its own downloads; the first job on a new host downloads them.
 
 ## Code formatting
 
