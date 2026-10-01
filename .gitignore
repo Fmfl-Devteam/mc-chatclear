@@ -1,3 +1,4 @@
 .gradle/
+.gradle-ci/
 build/
 .build-tools/

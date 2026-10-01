@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Logger;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 
 public final class ConfigurationService {
     private final File file;
@@ -22,7 +22,9 @@ public final class ConfigurationService {
         current = parse(defaults);
     }
 
-    public Settings current() { return current; }
+    public Settings current() {
+        return current;
+    }
 
     public boolean reload() {
         var yaml = new YamlConfiguration();
@@ -40,12 +42,18 @@ public final class ConfigurationService {
     public Settings parse(YamlConfiguration yaml) {
         Object lines = yaml.get("clear-lines");
         int count = 100;
-        if (lines instanceof Integer value && value >= 1 && value <= 1000) count = value;
-        else warn("clear-lines", "100");
+        if (lines instanceof Integer value && value >= 1 && value <= 1000) {
+            count = value;
+        } else {
+            warn("clear-lines", "100");
+        }
         Object bypass = yaml.get("bypass-enabled");
         boolean enabled = true;
-        if (bypass instanceof Boolean value) enabled = value;
-        else warn("bypass-enabled", "true");
+        if (bypass instanceof Boolean value) {
+            enabled = value;
+        } else {
+            warn("bypass-enabled", "true");
+        }
         Map<String, String> messages = new LinkedHashMap<>();
         for (String key : defaults.getConfigurationSection("messages").getKeys(false)) {
             String path = "messages." + key;

@@ -1,4 +1,22 @@
-plugins { java }
+plugins {
+    java
+    checkstyle
+    id("com.diffplug.spotless") version "8.10.3"
+}
+
+spotless {
+    java {
+        target("src/**/*.java")
+        googleJavaFormat("1.36.1").aosp()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+}
+checkstyle {
+    toolVersion = "14.3.0"
+    maxWarnings = 0
+}
+
 group = "de.fmfl.devteam"
 version = "1.0.0"
 repositories {

@@ -11,16 +11,28 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class ChatClearPlugin extends JavaPlugin {
-    @Override public void onEnable() {
+    @Override
+    public void onEnable() {
         saveDefaultConfig();
         YamlConfiguration defaults;
-        try (var reader = new InputStreamReader(Objects.requireNonNull(getResource("config.yml")), StandardCharsets.UTF_8)) {
+        try (var reader =
+                new InputStreamReader(
+                        Objects.requireNonNull(getResource("config.yml")),
+                        StandardCharsets.UTF_8)) {
             defaults = YamlConfiguration.loadConfiguration(reader);
-        } catch (java.io.IOException e) { throw new IllegalStateException("Cannot read bundled configuration", e); }
-        var configuration = new ConfigurationService(new File(getDataFolder(), "config.yml"), defaults, getLogger());
+        } catch (java.io.IOException e) {
+            throw new IllegalStateException("Cannot read bundled configuration", e);
+        }
+        var configuration =
+                new ConfigurationService(
+                        new File(getDataFolder(), "config.yml"), defaults, getLogger());
         configuration.reload();
-        var handler = new ChatClearCommand(configuration, new ChatClearService(() -> getServer().getOnlinePlayers()));
-        var command = Objects.requireNonNull(getCommand("chatclear"), "Missing chatclear command in plugin.yml");
+        var handler =
+                new ChatClearCommand(
+                        configuration, new ChatClearService(() -> getServer().getOnlinePlayers()));
+        var command =
+                Objects.requireNonNull(
+                        getCommand("chatclear"), "Missing chatclear command in plugin.yml");
         command.setExecutor(handler);
         command.setTabCompleter(handler);
         getLogger().info("ChatClear enabled.");
