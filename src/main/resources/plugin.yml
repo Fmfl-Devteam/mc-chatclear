@@ -1,0 +1,26 @@
+name: ChatClear
+version: '${version}'
+main: de.fmfl.devteam.chatclear.ChatClearPlugin
+api-version: '26.2'
+description: Configurable global and personal chat clearing.
+author: FMFL Devteam
+commands:
+  chatclear:
+    description: Clear global or personal chat, or reload configuration.
+    aliases: [cc, clearchat]
+permissions:
+  fmfl.chatclear.use:
+    description: Clear global chat.
+    default: op
+  fmfl.chatclear.self:
+    description: Clear your own chat.
+    default: op
+  fmfl.chatclear.silent:
+    description: Clear global chat silently (also requires use).
+    default: op
+  fmfl.chatclear.reload:
+    description: Reload ChatClear configuration.
+    default: op
+  fmfl.chatclear.bypass:
+    description: Exempt from global clears when bypass is enabled.
+    default: op

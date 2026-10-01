@@ -1,0 +1,15 @@
+# Clear lines must be an integer from 1 to 1000.
+clear-lines: 100
+# Players with fmfl.chatclear.bypass receive neither blank lines nor announcements.
+bypass-enabled: true
+# MiniMessage formatting supported. <player> is inserted as literal text.
+messages:
+  announcement: '<gray>Chat was cleared by <yellow><player></yellow>.</gray>'
+  global-success: '<green>Cleared chat for <count> player(s).</green>'
+  self-success: '<green>Your chat was cleared.</green>'
+  silent-success: '<green>Silently cleared chat for <count> player(s).</green>'
+  reload-success: '<green>ChatClear configuration reloaded.</green>'
+  reload-failure: '<red>Configuration could not be loaded; previous settings remain active. Check the server log.</red>'
+  no-permission: '<red>You do not have permission to do that.</red>'
+  player-only: '<red>Only online players can clear their own chat.</red>'
+  usage: '<yellow>Usage: /chatclear [self|silent|reload]</yellow>'
