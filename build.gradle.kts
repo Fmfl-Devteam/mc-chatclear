@@ -18,7 +18,7 @@ checkstyle {
 }
 
 group = "de.fmfl.devteam"
-version = "1.0.0"
+version = providers.gradleProperty("releaseVersion").getOrElse("1.0.0")
 repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")

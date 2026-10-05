@@ -6,6 +6,10 @@
 
 A small Paper plugin by FMFL Devteam. Uses Adventure/MiniMessage; no legacy chat APIs.
 
+## License
+
+Licensed under the [MIT License](LICENSE). Copyright (c) 2026 FMFL Devteam.
+
 ## Build and install
 
 - Supported target: **Paper 26.2**, Java **25 or newer**. API pinned to official stable build 129 (Paper Fill metadata); 26.3 was still beta when selected.
@@ -15,11 +19,20 @@ A small Paper plugin by FMFL Devteam. Uses Adventure/MiniMessage; no legacy chat
 
 ## Continuous integration
 
-The GitLab pipeline (`.gitlab-ci.yml`) uses a **shell runner** tagged `shared`; no container image is required. The runner must have a JDK supported by Gradle 9.8 (Java 25 recommended) on `PATH` or configured through `JAVA_HOME`, plus internet access to download Gradle, dependencies, and the Java 25 toolchain if missing.
+GitHub Actions (`.github/workflows/build.yml`) runs on branch pushes, pull requests, and tag pushes using Java 25 and Gradle dependency caching.
 
-- `check`: runs `./gradlew --no-daemon --console=plain check`, including tests, Spotless, and Checkstyle. Publishes JUnit results and HTML test/Checkstyle reports, including on failure.
-- `build`: runs `./gradlew --no-daemon --console=plain build` only after checks pass. Publishes `build/libs/*.jar`.
-- Artifacts are retained for one week. Gradle uses the runner user's persistent `~/.gradle` directory to reuse Gradle distributions, dependencies, and downloaded Java toolchains between jobs. Each runner host maintains its own downloads; the first job on a new host downloads them.
+- `build`: runs `build`, including unit tests, Spotless, and Checkstyle. Uploads test/lint reports even on failure and the plugin JAR on success. Workflow artifacts are retained for seven days.
+- `release`: after a successful tagged build, publishes a GitHub Release with generated release notes and the downloadable JAR under **Assets**. Release downloads do not expire after seven days. Only this job has repository write permission; authentication uses GitHub's built-in token, with no custom secret required.
+- Release tags must use a version such as `v1.0.0` or `1.0.0`. The optional `v` prefix is removed for the JAR filename and plugin metadata. Tags with a prerelease suffix, such as `v1.1.0-beta.1`, create a prerelease. Rerunning a tag workflow replaces its existing JAR asset.
+
+To publish a release, tag the desired commit and explicitly push the tag:
+
+```sh
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+Local builds default to version `1.0.0`; override it with `./gradlew build -PreleaseVersion=1.1.0`.
 
 ## Code formatting
 
@@ -43,12 +56,12 @@ Checkstyle additionally requires curly braces for every `if`, `else`, `for`, `wh
 
 Aliases: `/cc`, `/clearchat`. All permissions default to **op**, with no implicit permission inheritance.
 
-| Command | Permission | Behavior |
-| --- | --- | --- |
-| `/chatclear` | `fmfl.chatclear.use` | Clear online players' chat; announce to cleared players |
-| `/chatclear self` | `fmfl.chatclear.self` | Online players only; clear own chat, regardless of bypass |
-| `/chatclear silent` | `fmfl.chatclear.use` **and** `fmfl.chatclear.silent` | Global clear without a public announcement |
-| `/chatclear reload` | `fmfl.chatclear.reload` | Reload configuration atomically |
+| Command             | Permission                                           | Behavior                                                  |
+| ------------------- | ---------------------------------------------------- | --------------------------------------------------------- |
+| `/chatclear`        | `fmfl.chatclear.use`                                 | Clear online players' chat; announce to cleared players   |
+| `/chatclear self`   | `fmfl.chatclear.self`                                | Online players only; clear own chat, regardless of bypass |
+| `/chatclear silent` | `fmfl.chatclear.use` **and** `fmfl.chatclear.silent` | Global clear without a public announcement                |
+| `/chatclear reload` | `fmfl.chatclear.reload`                              | Reload configuration atomically                           |
 
 `fmfl.chatclear.bypass` excludes players from global clears **and announcements** when `bypass-enabled` is true. Since this defaults to op, operators are exempt by default. Set `bypass-enabled: false` to include everyone. Console can run global, silent and reload commands, and receives private success/error feedback. Every successful clear reports the number of eligible players, including zero. Completion is permission-filtered; console is never offered `self`.
 
